@@ -21,6 +21,30 @@ apiRouter.get("/", async (req, res) => {
   res.json({ tables });
 });
 
+app.get("/my-route", (req, res) => {
+  res.send("Hi friend");
+});
+
+app.get("/future-meals", (req, res) => {
+  res.send("future-meals");
+});
+
+app.get("/past-meals", (req, res) => {
+  res.send("past-meals");
+});
+
+app.get("/all-meals", (req, res) => {
+  res.send("all-meals");
+});
+
+app.get("/first-meal", (req, res) => {
+  res.send("first-meal");
+});
+
+app.get("/last-meal", (req, res) => {
+  res.send("last-meal");
+});
+
 // This nested router example can also be replaced with your own sub-router
 apiRouter.use("/nested", nestedRouter);
 
