@@ -6,7 +6,7 @@ import knex from "./database_client.js";
 import { mealsRouter } from "./routers/mealsRouter.js";
 import { reservationsRouter } from "./routers/reservations.js";
 
-const app = express();  
+const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -27,8 +27,6 @@ apiRouter.get("/", async (req, res) => {
 apiRouter.use("/meals", mealsRouter);
 apiRouter.use("/reservations", reservationsRouter);
 app.use("/api", apiRouter);
-
-
 
 app.listen(process.env.PORT, () => {
   console.log(`API listening on port ${process.env.PORT}`);
