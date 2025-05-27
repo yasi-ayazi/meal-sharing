@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import knex from "./database_client.js";
 import { mealsRouter } from "./routers/mealsRouter.js";
 import { reservationsRouter } from "./routers/reservations.js";
+import { reviewsRouter } from "./routers/reviews.js";
 
 const app = express();
 app.use(cors());
@@ -12,23 +13,22 @@ app.use(bodyParser.json());
 
 const apiRouter = express.Router();
 
-
 app.get("/my-route", (req, res) => {
   res.send("Hi friend");
 });
 
-app.get("/future-meals",async (req, res) => {
+app.get("/future-meals", async (req, res) => {
   const meals = await knex("Meal")
-  .select("*")
-  .where("when", ">", knex.fn.now());
-    res.json(meals);
+    .select("*")
+    .where("when", ">", knex.fn.now());
+  res.json(meals);
 });
 
-app.get("/past-meals",async (req, res) => {
+app.get("/past-meals", async (req, res) => {
   const meals = await knex("Meal")
-  .select("*")
-  .where("when", "<", knex.fn.now());
-    res.json(meals);
+    .select("*")
+    .where("when", "<", knex.fn.now());
+  res.json(meals);
 });
 
 app.get("/all-meals", async (req, res) => {
@@ -36,23 +36,23 @@ app.get("/all-meals", async (req, res) => {
   res.json(tables);
 });
 
-app.get("/first-meal", async(req, res) => {
- const firstmeal= await knex("Meal")
-  .select("*")
-  .orderBy("id", "asc")
-  .limit(1);
-  if(firstmeal.length === 0) {
+app.get("/first-meal", async (req, res) => {
+  const firstmeal = await knex("Meal")
+    .select("*")
+    .orderBy("id", "asc")
+    .limit(1);
+  if (firstmeal.length === 0) {
     return res.status(404).json({ message: "No meals found" });
   }
   res.json(firstmeal);
 });
 
-app.get("/last-meal",async (req, res) => {
-  const lastmeal= await knex("Meal")
-  .select("*")
-  .orderBy("id", "desc")
-  .limit(1);
-  if(lastmeal.length === 0) {
+app.get("/last-meal", async (req, res) => {
+  const lastmeal = await knex("Meal")
+    .select("*")
+    .orderBy("id", "desc")
+    .limit(1);
+  if (lastmeal.length === 0) {
     return res.status(404).json({ message: "No meals found" });
   }
   res.json(lastmeal);
@@ -62,6 +62,7 @@ app.get("/last-meal",async (req, res) => {
 // apiRouter.use("/mealsRouter", mealsRouter);
 apiRouter.use("/meals", mealsRouter);
 apiRouter.use("/reservations", reservationsRouter);
+apiRouter.use("/reviews", reviewsRouter);
 app.use("/api", apiRouter);
 
 app.listen(process.env.PORT, () => {
