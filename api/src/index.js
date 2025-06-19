@@ -6,6 +6,7 @@ import knex from "./database_client.js";
 import { mealsRouter } from "./routers/mealsRouter.js";
 import { reservationsRouter } from "./routers/reservations.js";
 import { reviewsRouter } from "./routers/reviews.js";
+import nestedRouter from "./routers/nested.js";
 
 const app = express();
 app.use(cors());
@@ -62,7 +63,10 @@ app.get("/last-meal", async (req, res) => {
 // apiRouter.use("/mealsRouter", mealsRouter);
 apiRouter.use("/meals", mealsRouter);
 apiRouter.use("/reservations", reservationsRouter);
-apiRouter.use("/reviews", reviewsRouter);
+apiRouter.use("/api/reviews", reviewsRouter);
+apiRouter.use("/nested", nestedRouter);
+
+
 app.use("/api", apiRouter);
 
 app.listen(process.env.PORT, () => {

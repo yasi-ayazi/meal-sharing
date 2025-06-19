@@ -8,7 +8,7 @@ function TestPage() {
 
   useEffect(() => {
     async function fetchMessage() {
-      const response = await fetch(api("/nested"));
+      const response = await fetch("/api/nested");
       const { message } = await response.json();
       setMessage(message);
     }
