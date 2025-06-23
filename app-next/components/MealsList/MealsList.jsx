@@ -1,14 +1,20 @@
- "use client"
+"use client"
 import { useEffect, useState } from "react";
+import Meal from "../Meal/Meal";
+import styles from "./MealsList.module.css";
 
 export const MealsList = () => {
     const [meals, setMeals] = useState([]);
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "/api/meals";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
-        fetch(apiUrl+"/api/meals")
+        fetch(`${apiUrl}/api/meals`)
+
             .then((res) => res.json())
-            .then((data) => setMeals(data))
+            .then((data) => {
+                console.log("Fetched meals:", data);
+                setMeals(data);
+            })
             .catch((err) => console.error("Error fetching meals:", err));
     }, []);
 
@@ -18,14 +24,11 @@ export const MealsList = () => {
             {meals.length === 0 ? (
                 <p>Loading...</p>
             ) : (
-                meals.map((meal) => (
-                    <div key={meal.id}>
-                        <p><strong>{meal.title}</strong></p>
-                        <p>{meal.description}</p>
-                        <p>Price: {meal.price} DKK</p>
-                        <hr />
-                    </div>
-                ))
+                <div className={styles.grid}>
+                    {meals.map((meal) => (
+                        <Meal key={meal.id} meal={meal} />
+                    ))}
+                </div>
             )}
         </div>
     );
