@@ -2,20 +2,18 @@
 import { useEffect, useState } from "react";
 import Meal from "../Meal/Meal";
 import styles from "./MealsList.module.css";
+import api from "@/utils/api";
 
 export const MealsList = () => {
     const [meals, setMeals] = useState([]);
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
-        fetch(`${apiUrl}/api/meals`)
-
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("Fetched meals:", data);
-                setMeals(data);
-            })
-            .catch((err) => console.error("Error fetching meals:", err));
+        async function fetchMeals() {
+            const result = await fetch(api("/meals"));
+            const jsonResult = await result.json();
+            setMeals(jsonResult);
+        }
+        fetchMeals();
     }, []);
 
     return (
