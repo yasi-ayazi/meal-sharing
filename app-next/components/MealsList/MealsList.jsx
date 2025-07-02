@@ -1,32 +1,39 @@
- "use client"
+"use client";
 import { useEffect, useState } from "react";
+import Meal from "../Meal/Meal";
+import styles from "./MealsList.module.css";
+import api from "@/utils/api";
 
 export const MealsList = () => {
     const [meals, setMeals] = useState([]);
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "/api/meals";
+
+    const fetchMeals = async () => {
+        const result = await fetch(api("/meals"));
+        const jsonResult = await result.json();
+        setMeals(jsonResult);
+    };
 
     useEffect(() => {
-        fetch(apiUrl+"/api/meals")
-            .then((res) => res.json())
-            .then((data) => setMeals(data))
-            .catch((err) => console.error("Error fetching meals:", err));
+        fetchMeals();
     }, []);
+
+    let content;
+    if (meals.length === 0) {
+        content = <p>Loading...</p>;
+    } else {
+        content = (
+            <div className={styles.grid}>
+                {meals.map((meal) => (
+                    <Meal key={meal.id} meal={meal} />
+                ))}
+            </div>
+        );
+    }
 
     return (
         <div>
             <h2>Meals</h2>
-            {meals.length === 0 ? (
-                <p>Loading...</p>
-            ) : (
-                meals.map((meal) => (
-                    <div key={meal.id}>
-                        <p><strong>{meal.title}</strong></p>
-                        <p>{meal.description}</p>
-                        <p>Price: {meal.price} DKK</p>
-                        <hr />
-                    </div>
-                ))
-            )}
+            {content}
         </div>
     );
 };
