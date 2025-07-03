@@ -17,7 +17,9 @@ export default function MealDetail({ id }) {
     fetchMeal();
   }, [id]);
 
-  if (!meal) return <p>Loading...</p>;
+  if (!meal?.id) {
+  return <p>Meal not found.</p>;
+}
 
   return (
     <div className={styles.container}>

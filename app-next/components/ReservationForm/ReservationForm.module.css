@@ -1,19 +1,21 @@
-.form {
+.myform {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin: 1rem 0;
+  margin-top: 1rem;
 }
 
-input {
+.myinput {
   padding: 0.5rem;
+  height: 100px;
+  resize: vertical;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
-button {
+.mybutton {
   padding: 0.6rem;
-  background-color: #0070f3;
+  background-color: #00b894;
   color: white;
   border: none;
   border-radius: 5px;

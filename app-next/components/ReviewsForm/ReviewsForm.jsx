@@ -14,10 +14,14 @@ export default function ReviewsForm({ mealId }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          title: "Review",
           meal_id: mealId,
           stars: 5,
           description: review,
+          created_date: new Date().toISOString().slice(0, 10),
         }),
+
+
       });
 
       if (!res.ok) throw new Error("Failed");
@@ -31,7 +35,7 @@ export default function ReviewsForm({ mealId }) {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <h4>Leave a review</h4>
-      <textarea
+      <textarea className={styles.textarea}
         placeholder="Write your review"
         value={review}
         onChange={(e) => setReview(e.target.value)}
