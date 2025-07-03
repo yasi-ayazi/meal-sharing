@@ -1,4 +1,6 @@
+"use client";
 import { MealsList } from "../MealsList/MealsList";
+import Link from "next/link";
 
 const HomePage = () => {
     return (
@@ -7,6 +9,12 @@ const HomePage = () => {
             <p>Find delicious meals shared by others.</p>
 
             <MealsList />
+
+            <div style={{ marginTop: "2rem" }}>
+                <Link href="/meals">
+                    <button>See all meals</button>
+                </Link>
+            </div>
         </div>
     );
 };

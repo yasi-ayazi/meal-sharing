@@ -91,7 +91,10 @@ mealsRouter.get("/:id?", async (req, res) => {
         return res.status(404).send({ error: "Meal not found" });
       }
 
-      return res.status(200).send({ meal });
+      const reservations = await knex("Reservation").where("meal_id", mealId);
+      const available_reservations = meal.max_reservations - reservations.length;
+
+      return res.status(200).send({ ...meal, available_reservations });
     }
 
     const meals = await knex("Meal").select("*");

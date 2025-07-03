@@ -30,7 +30,7 @@ reviewsRouter.post("/", async (req, res) => {
     description: z.string().min(1),
     meal_id: z.coerce.number().int().positive(),
     stars: z.coerce.number().int().min(1).max(5),
-    created_date: z.string(), // Format check can be added if needed
+    created_date: z.string(),
   });
 
   const parsed = reviewSchema.safeParse(req.body);
