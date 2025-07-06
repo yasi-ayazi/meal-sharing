@@ -4,6 +4,7 @@ import styles from "./MealDetail.module.css";
 import api from "@/utils/api";
 import ReservationForm from "../ReservationForm/ReservationForm";
 import ReviewsForm from "../ReviewsForm/ReviewsForm";
+import imageMap from "@/utils/imageMap"; 
 
 export default function MealDetail({ id }) {
   const [meal, setMeal] = useState(null);
@@ -34,6 +35,11 @@ export default function MealDetail({ id }) {
 
   return (
     <div className={styles.container}>
+      <img
+        src={imageMap[meal.title] || "/pics/default.jpg"}
+        alt={meal.title}
+        className={styles.image}
+      />
       <h2>{meal.title}</h2>
       <p>{meal.description}</p>
       <p>Location: {meal.location}</p>
