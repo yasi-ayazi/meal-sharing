@@ -47,11 +47,12 @@ export default function MealDetail({ id }) {
       <p>Max Reservations: {meal.max_reservations}</p>
       <p>Price: {meal.price} DKK</p>
 
-      {meal.available_reservations > 0 ? (
+      {meal.available_spots > 0 ? (
         <ReservationForm mealId={meal.id} />
       ) : (
         <p>No reservations available</p>
       )}
+
 
       <ReviewsForm mealId={meal.id} />
     </div>
