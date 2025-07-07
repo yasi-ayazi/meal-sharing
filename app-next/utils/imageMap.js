@@ -1,7 +1,28 @@
 const imageMap = {
+  "default": "/pics/default.jpg",
   "Italian Night": "/pics/italian.jpg",
   "Sushi Special": "/pics/sushi.jpg",
   "BBQ Feast": "/pics/bbq.jpg",
+  "Chili Con Carne": "/pics/Chili-Carne.jpg",
+  "Beef Stroganoff": "/pics/Beef-Stroganoff.jpg",
+  "Chicken Biryani": "/pics/Biryani.jpg",
+  "Miso Ramen": "/pics/Ramen.jpg",
+  "Thai Green Curry": "/pics/Thai-Curry.jpg",
+  "Vegetarian Pizza": "/pics/Vegetarian-Pizza.jpg",
+  "Falafel Plate": "/pics/falafel.jpg",
+  "Stuffed Bell Peppers": "/pics/Bell-Peppers.jpg",
+  "Gnocchi al Pesto": "/pics/Gnocchi-al-Pesto.jpg",
+  "Tacos al Pastor": "/pics/Tacos.jpg",
+  "Shakshuka": "/pics/Shakshuka.jpg",
+  "Fish and Chips": "/pics/Fish-Chips.jpg",
+  "Kebab Platter": "/pics/Kebab.jpg",
+  "Italian Lasagna": "/pics/lasagna.jpg",
+  "Butter Chicken": "/pics/Butter-Chicken.jpg",
+  "Katsu Curry": "/pics/Katsu-Curry.jpg",
+  "BBQ Ribs": "/pics/Ribs.jpg",
+  "Paella Valenciana": "/pics/Paella.jpg",
+  "Sushi Combo": "/pics/Sushi-Combo.png",
+  "Grilled Salmon": "/pics/Salmon.jpg",
 };
 
 export default imageMap;
