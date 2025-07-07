@@ -1,19 +1,19 @@
 "use client";
 import { MealsList } from "../MealsList/MealsList";
 import Link from "next/link";
+import styles from "./HomePage.module.css";
 
 const HomePage = () => {
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Welcome to Meal Sharing!</h1>
-      <p>Find delicious meals shared by others.</p>
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Welcome to Meal Sharing!</h1>
+      <p className={styles.description}>Find delicious meals shared by others.</p>
 
-      
-      <MealsList limit={10} />
+      <MealsList limit={8} />
 
-      <div style={{ marginTop: "2rem" }}>
+      <div className={styles.linkWrapper}>
         <Link href="/meals">
-          <button>See all meals</button>
+          <button className={styles.button}>See all meals</button>
         </Link>
       </div>
     </div>

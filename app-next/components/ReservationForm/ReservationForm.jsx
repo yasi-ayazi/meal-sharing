@@ -15,18 +15,18 @@ export default function ReservationForm({ mealId }) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-const res = await fetch(api("/reservations"), {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    mealId: mealId,
-    number_of_guests: 1,
-    contact_name: formData.name,
-    contact_email: formData.email,
-    contact_phonenumber: formData.phonenumber,
-    created_date: new Date().toISOString().slice(0, 10),
-  }),
-});
+      const res = await fetch(api("/reservations"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mealId: mealId,
+          number_of_guests: 1,
+          contact_name: formData.name,
+          contact_email: formData.email,
+          contact_phonenumber: formData.phonenumber,
+          created_date: new Date().toISOString().slice(0, 10),
+        }),
+      });
 
 
       if (!res.ok) throw new Error("Failed to reserve");
@@ -38,7 +38,7 @@ const res = await fetch(api("/reservations"), {
 
   return (
     <>
-      <form className= {styles.myform} onSubmit={handleSubmit}>
+      <form className={styles.myform} onSubmit={handleSubmit}>
         <h4>Reserve a seat</h4>
         <input
           className={styles.myinput}

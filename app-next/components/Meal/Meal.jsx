@@ -20,9 +20,9 @@ const Meal = ({ meal }) => {
       }
     };
 
-    fetchSpots(); // بار اول
-    const interval = setInterval(fetchSpots, 5000); // هر ۵ ثانیه
-    return () => clearInterval(interval); // cleanup
+    fetchSpots();
+    const interval = setInterval(fetchSpots, 5000);
+    return () => clearInterval(interval);
   }, [meal.id]);
 
   return (
