@@ -4,7 +4,7 @@ import styles from "./MealDetail.module.css";
 import api from "@/utils/api";
 import ReservationForm from "../ReservationForm/ReservationForm";
 import ReviewsForm from "../ReviewsForm/ReviewsForm";
-import imageMap from "@/utils/imageMap"; 
+import imageMap from "@/utils/imageMap";
 
 export default function MealDetail({ id }) {
   const [meal, setMeal] = useState(null);
