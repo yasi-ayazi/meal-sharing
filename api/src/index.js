@@ -63,7 +63,7 @@ app.get("/last-meal", async (req, res) => {
 // apiRouter.use("/mealsRouter", mealsRouter);
 apiRouter.use("/meals", mealsRouter);
 apiRouter.use("/reservations", reservationsRouter);
-apiRouter.use("/api/reviews", reviewsRouter);
+apiRouter.use("/reviews", reviewsRouter);
 apiRouter.use("/nested", nestedRouter);
 
 
