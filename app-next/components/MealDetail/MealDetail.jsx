@@ -9,22 +9,21 @@ export default function MealDetail({ id }) {
   const [meal, setMeal] = useState(null);
   const [notFound, setNotFound] = useState(false);
 
-  useEffect(() => {
-    async function fetchMeal() {
-      try {
-        const res = await fetch(api(`/meals/${id}`));
-        if (!res.ok) {
-          setNotFound(true);
-          return;
-        }
-
-        const json = await res.json();
-        setMeal(json);
-      } catch {
+  const fetchMeal = async () => {
+    try {
+      const res = await fetch(api(`/meals/${id}`));
+      if (!res.ok) {
         setNotFound(true);
+        return;
       }
+      const json = await res.json();
+      setMeal(json);
+    } catch {
+      setNotFound(true);
     }
+  };
 
+  useEffect(() => {
     if (id) {
       fetchMeal();
     }
