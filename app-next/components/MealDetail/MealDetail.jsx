@@ -53,7 +53,6 @@ export default function MealDetail({ id }) {
         <p>No reservations available</p>
       )}
 
-
       <ReviewsForm mealId={meal.id} />
     </div>
   );
