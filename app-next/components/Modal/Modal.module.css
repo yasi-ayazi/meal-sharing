@@ -104,3 +104,7 @@
   transform: none;
   background: whitesmoke;
 }
+
+.closeIcon {
+  margin-bottom: -3px;
+}

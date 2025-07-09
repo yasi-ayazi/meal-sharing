@@ -12,12 +12,11 @@ mealsRouter.get("/", async (req, res) => {
     dateAfter: z.string().optional(),
     dateBefore: z.string().optional(),
     limit: z.coerce.number().int().positive().optional(),
-    sortKey: z.enum(["when", "max_reservations", "price"]).optional(),
+    sortKey: z.enum(["when", "max_reservations", "price", "title", "id"]).optional(),
     sortDir: z.enum(["asc", "desc"]).optional(),
   });
 
   const parsed = querySchema.safeParse(req.query);
-
   if (!parsed.success) {
     return res.status(400).json({ error: parsed.error.flatten() });
   }
@@ -34,29 +33,19 @@ mealsRouter.get("/", async (req, res) => {
   } = parsed.data;
 
   try {
-    let query = knex("Meal");
+    let query = knex("Meal")
+      .leftJoin("Reservation", "Meal.id", "Reservation.meal_id")
+      .groupBy("Meal.id")
+      .select("Meal.*")
+      .count("Reservation.id as reservations_count");
 
-    if (maxPrice) {
-      query.where("price", "<", maxPrice);
-    }
-
-    if (title) {
-      query.where("title", "like", `%${title}%`);
-    }
-
-    if (dateAfter) {
-      query.where("when", ">", dateAfter);
-    }
-
-    if (dateBefore) {
-      query.where("when", "<", dateBefore);
-    }
+    if (maxPrice) query.where("price", "<", maxPrice);
+    if (title) query.where("title", "like", `%${title}%`);
+    if (dateAfter) query.where("when", ">", dateAfter);
+    if (dateBefore) query.where("when", "<", dateBefore);
 
     if (availableReservations === "true") {
-      query
-        .leftJoin("Reservation", "Meal.id", "Reservation.meal_id")
-        .groupBy("Meal.id")
-        .havingRaw("Meal.max_reservations > COUNT(Reservation.id)");
+      query.havingRaw("Meal.max_reservations > COUNT(Reservation.id)");
     }
 
     if (sortKey) {
@@ -67,114 +56,37 @@ mealsRouter.get("/", async (req, res) => {
       query.limit(limit);
     }
 
-    const meals = await query.select("Meal.*");
-    res.json(meals);
+    const meals = await query;
+    const enrichedMeals = meals.map((meal) => ({
+      ...meal,
+      available_spots: meal.max_reservations - meal.reservations_count,
+    }));
+
+    res.json(enrichedMeals);
   } catch (error) {
     console.error("Error fetching meals:", error);
     res.status(500).send({ error: "Internal Server Error" });
   }
 });
 
-
-mealsRouter.get("/:id?", async (req, res) => {
+mealsRouter.get("/:id", async (req, res) => {
   try {
     const mealId = req.params.id;
-
-    if (mealId) {
-      if (isNaN(mealId)) {
-        return res.status(400).send({ error: "Invalid meal ID" });
-      }
-
-      const meal = await knex("Meal").where({ id: mealId }).first();
-
-      if (!meal) {
-        return res.status(404).send({ error: "Meal not found" });
-      }
-
-      const reservations = await knex("Reservation").where("meal_id", mealId);
-      const available_reservations = meal.max_reservations - reservations.length;
-
-      return res.status(200).send({ ...meal, available_reservations });
-    }
-
-    const meals = await knex("Meal").select("*");
-
-    return res.status(200).send({ meals });
-  } catch (error) {
-    console.error("Error fetching meals:", error);
-    return res.status(500).send({ error: "Internal Server Error" });
-  }
-});
-
-mealsRouter.post("/", async (req, res) => {
-  try {
-    const { title, description, location, max_reservations, price } = req.body;
-
-    if (!title || !description || !location || !max_reservations || !price) {
-      return res.status(400).send({ error: "Missing required fields" });
-    }
-    // Format the current date and time for `when`
-    const currentDateTime = new Date()
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
-    // Format the current date for `created_date`
-    const currentDate = new Date().toISOString().slice(0, 10);
-    const [newMealId] = await knex("Meal").insert({
-      title,
-      description,
-      location,
-      max_reservations,
-      price,
-      when: currentDateTime,
-      created_date: currentDate,
-    });
-
-    const newMeal = await knex("Meal").where({ id: newMealId }).first();
-    return res.status(201).send({ meal: newMeal });
-  } catch (error) {
-    console.error("Error creating meal:", error);
-    return res.status(500).send({ error: "Internal Server Error" });
-  }
-});
-
-mealsRouter.put("/:id", async (req, res) => {
-  try {
-    const mealId = req.params.id;
-    const { max_reservations, price } = req.body;
-
-    if (!max_reservations || !price) {
-      return res.status(400).send({ error: "Missing required fields" });
-    }
-    const updatedRows = await knex("Meal")
-      .where({ id: mealId })
-      .update({ max_reservations, price });
-    if (updatedRows === 0) {
-      return res.status(404).send({ error: "Meal not found" });
-    }
-    const updatedMeal = await knex("Meal").where({ id: mealId }).first();
-
-    return res.status(200).send({ meal: updatedMeal });
-  } catch (error) {
-    console.error("Error updating meal:", error);
-    return res.status(500).send({ error: "Internal Server Error" });
-  }
-});
-
-mealsRouter.delete("/:id", async (req, res) => {
-  try {
-    const mealId = req.params.id;
-
     if (isNaN(mealId)) {
       return res.status(400).send({ error: "Invalid meal ID" });
     }
-    const deletedRows = await knex("Meal").where({ id: mealId }).del();
-    if (deletedRows === 0) {
+
+    const meal = await knex("Meal").where({ id: mealId }).first();
+    if (!meal) {
       return res.status(404).send({ error: "Meal not found" });
     }
-    return res.status(200).send({ message: "Meal deleted successfully" });
+
+    const reservations = await knex("Reservation").where("meal_id", mealId);
+    const available_spots = meal.max_reservations - reservations.length;
+
+    return res.status(200).send({ ...meal, available_spots });
   } catch (error) {
-    console.error("Error deleting meals:", error);
+    console.error("Error fetching meal by id:", error);
     return res.status(500).send({ error: "Internal Server Error" });
   }
 });

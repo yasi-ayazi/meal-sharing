@@ -4,6 +4,7 @@ import styles from "./MealDetail.module.css";
 import api from "@/utils/api";
 import ReservationForm from "../ReservationForm/ReservationForm";
 import ReviewsForm from "../ReviewsForm/ReviewsForm";
+import imageMap from "@/utils/imageMap";
 
 export default function MealDetail({ id }) {
   const [meal, setMeal] = useState(null);
@@ -34,6 +35,11 @@ export default function MealDetail({ id }) {
 
   return (
     <div className={styles.container}>
+      <img
+        src={imageMap[meal.title] || "/pics/default.jpg"}
+        alt={meal.title}
+        className={styles.image}
+      />
       <h2>{meal.title}</h2>
       <p>{meal.description}</p>
       <p>Location: {meal.location}</p>
@@ -41,7 +47,7 @@ export default function MealDetail({ id }) {
       <p>Max Reservations: {meal.max_reservations}</p>
       <p>Price: {meal.price} DKK</p>
 
-      {meal.available_reservations > 0 ? (
+      {meal.available_spots > 0 ? (
         <ReservationForm mealId={meal.id} />
       ) : (
         <p>No reservations available</p>
