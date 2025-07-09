@@ -8,11 +8,7 @@ body,
 }
 
 body {
-  background-image: url("/pics/background.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
+  background-color: #E8FAF1;
 }
 
 body::after {

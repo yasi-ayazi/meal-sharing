@@ -2,13 +2,10 @@
   padding: 3rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  background-image: url("/background/lemon.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
   min-height: 100vh;
   box-sizing: border-box;
 }
+
 
 .heading {
   font-size: 2rem;
